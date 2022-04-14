@@ -1,3 +1,7 @@
+
+import pdb
+
+
 class Node:
     def __init__(self, val=None):
         self.val = val
@@ -109,3 +113,65 @@ class SinglyLinkedList:
             node.val = val
         else:
             raise TypeError("Invalid argument(s) type")
+
+
+class DoublyLinkedList(SinglyLinkedList):
+    def __init__(self, values: list = None):
+        if values is None:
+            self.head_node = None
+            self.tail_node = None
+            self.length = None
+        elif isinstance(values, list):
+            self.head_node = Node()
+            self.length = len(values)
+            node = self.head_node
+            prev_node = None
+            for i, val in enumerate(values):
+                if i > 0:
+                    node.prev = prev_node
+                node.val = val
+                node.next = Node()
+                prev_node = node
+                if i == self.length - 1:
+                    self.tail_node = node
+                node = node.next
+        else:
+            raise ValueError(f"Invalid values arg {values}")
+
+    def __eq__(self, other: 'DoublyLinkedList'):
+        if not isinstance(other, DoublyLinkedList) or len(self) != len(other):
+            return False
+        for node1, node2 in zip(self.__iter__(), other.__iter__()):
+            if node1 != node2:
+                return False
+        return True
+
+    def __ne__(self, other: 'DoublyLinkedList'):
+        return not self == other
+
+    def __delitem__(self, key: int):
+        if isinstance(key, int) and key == 0:
+            node = self.head_node
+            temp = self.head_node.next
+            del node
+            self.head_node = temp
+            self.head_node.prev = None
+        elif isinstance(key, int) and key == self.length - 1:
+            node = self.tail_node
+            temp = self.tail_node.prev
+            del node
+            self.tail_node = temp
+            self.tail_node.next = None
+        elif isinstance(key, int) and key > 0 and key < self.length - 1:
+            node = self._locate_key_node(key, self.head_node)
+            prev_node = node.prev
+            next_node = node.next
+            prev_node.next = next_node
+            next_node.prev = prev_node
+            del node
+        else:
+            raise TypeError("Invalid key type")
+        self.length -= 1
+
+    def __str__(self):
+        return '<->'.join(str(node) for node in self.__iter__())

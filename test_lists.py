@@ -1,5 +1,5 @@
 import pytest
-from lists import Node, SinglyLinkedList as sll
+from lists import Node, SinglyLinkedList as sll, DoublyLinkedList as dll
 
 
 class TestLists:
@@ -30,6 +30,10 @@ class TestLists:
         assert sll([1, 2, 3]) == sll([1, 2, 3])
         assert sll([]) == sll([])
 
+    def test_DLL_eq(self):
+        assert dll([1, 2, 3]) == dll([1, 2, 3])
+        assert dll([]) == dll([])
+
     def test_SLL_ne(self):
         assert sll([1, 2, 3]) != sll([1, 2, 3, 4])
         assert sll([]) != sll([1])
@@ -41,7 +45,7 @@ class TestLists:
 
     def test_SLL_delitem(self):
         a = sll([1, 2, 3])
-        del a[0]
+        a.__delitem__(0)
         assert a == sll([2, 3])
         b = sll([1, 2, 3])
         b.__delitem__(1)
@@ -49,6 +53,17 @@ class TestLists:
         c = sll([1, 2, 3])
         c.__delitem__(2)
         assert c == sll([1, 2])
+
+    def test_DLL_delitem(self):
+        a = dll([1, 2, 3])
+        a.__delitem__(0)
+        assert a == dll([2, 3])
+        b = dll([1, 2, 3])
+        b.__delitem__(1)
+        assert b == dll([1, 3])
+        c = dll([1, 2, 3])
+        c.__delitem__(2)
+        assert c == dll([1, 2])
 
     def test_SLL_contains(self):
         assert 1 in sll([0, 1, 3])
